@@ -151,7 +151,7 @@
     <JavaCompile Include="src\com\SmsHandlerNative\SmsHandlerNative.java" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SmsHandler\SmsHandler.NativeActivity\SmsHandler.NativeActivity.vcxproj" />
+    <ProjectReference Include="SmsHandler.NativeActivity\SmsHandler.NativeActivity.vcxproj" />
   </ItemGroup>
   <Import Project="$(AndroidTargetsPath)\Android.targets" />
   <ImportGroup Label="ExtensionTargets" />

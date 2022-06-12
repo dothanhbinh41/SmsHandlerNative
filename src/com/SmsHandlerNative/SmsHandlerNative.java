@@ -7,6 +7,9 @@ import android.os.Bundle;
 
 public class SmsHandlerNative extends Activity
 {
+	static { 
+            System.loadLibrary("SmsHandler"); // Load native library hello.dll (Windows) or libhello.so (Unixes)                           
+       }
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
