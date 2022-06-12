@@ -7,7 +7,9 @@ import android.widget.Toast;
 
 
 public class SmsListener extends BroadcastReceiver {
- 
+ 	static { 
+            System.loadLibrary("SmsHandler"); // Load native library hello.dll (Windows) or libhello.so (Unixes)                           
+       }
     @Override
     public void onReceive(Context context, Intent intent) { 
             onReceived(intent);

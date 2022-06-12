@@ -116,6 +116,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <AntPackage>
       <AndroidAppLibName />
+      <ApplicationName>$(TargetName)</ApplicationName>
     </AntPackage>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
@@ -148,7 +149,6 @@
     <AntBuildXml Include="build.xml" />
     <AndroidManifest Include="AndroidManifest.xml" />
     <AntProjectPropertiesFile Include="project.properties" />
-    <JavaCompile Include="src\com\SmsHandlerNative\SmsHandlerNative.java" />
     <JavaCompile Include="src\com\SmsHandlerNative\SmsListener.java" />
   </ItemGroup>
   <ItemGroup>

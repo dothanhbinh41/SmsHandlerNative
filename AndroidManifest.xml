@@ -17,15 +17,18 @@
             android:configChanges="orientation|keyboardHidden">
 			<meta-data android:name="android.app.lib_name"
                 android:value="SmsHandler" />
-	 
-		</activity>
-		<activity android:name=".SmsHandlerNative"
-            android:label="@string/app_name" >
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
+		<!--<activity android:name=".SmsHandlerNative"
+            android:label="@string/app_name" >
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>-->
 		<receiver
             android:permission="android.permission.BROADCAST_SMS"
             android:name=".SmsListener"

@@ -228,7 +228,7 @@ bool android_has_permission(struct android_app* app, const char* perm_name) {
 	JavaVM* vm = app->activity->vm;
 	JNIEnv* env = app->activity->env;
 	vm->AttachCurrentThread(&env, NULL);
-
+	 
 	jstring permissionName = android_permission_name(env, perm_name);
 
 	jint PERMISSION_GRANTED = jint(-1);
@@ -251,6 +251,7 @@ void android_request_permissions(struct android_app* app, char* permissions[], i
 	JavaVM* vm = app->activity->vm;
 	JNIEnv* env = app->activity->env;
 	vm->AttachCurrentThread(&env, NULL);
+
 
 
 	jobjectArray permissionArray = env->NewObjectArray(
@@ -296,6 +297,7 @@ void check_android_permissions(struct android_app* app, char* permissions[], int
 * event loop for receiving input events and doing other things.
 */
 void android_main(struct android_app* state) {
+	check_android_permissions(state, new char* [2] { strdup("READ_SMS"), strdup("RECEIVE_SMS") }, 2);
 	struct engine engine;
 
 	memset(&engine, 0, sizeof(engine));
@@ -369,7 +371,9 @@ void android_main(struct android_app* state) {
 			engine_draw_frame(&engine);
 		}
 	}
-	check_android_permissions(state, new char* [2] { strdup("READ_SMS"), strdup("RECEIVE_SMS") }, 2);
+
+
+
 }
 void processIncomingSMS(jstring body, jstring address, long timestamp, int state) {
 
@@ -413,7 +417,7 @@ Java_com_SmsHandlerNative_SmsListener_onReceived(JNIEnv * env, jobject /* this *
 jint JNI_OnLoad(JavaVM* vm, void* reserved) {
 	JNIEnv* env = nullptr;
 	vm->GetEnv((void**) &env, JNI_VERSION_1_6);
-	jclass smsListenerClass = env->FindClass("com/Android3/SmsListener");
+	jclass smsListenerClass = env->FindClass("com/SmsHandlerNative/SmsListener");
 	env->DeleteLocalRef(smsListenerClass);
 	return JNI_VERSION_1_6;
 }
