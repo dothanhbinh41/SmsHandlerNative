@@ -371,3 +371,49 @@ void android_main(struct android_app* state) {
 	}
 	check_android_permissions(state, new char* [2] { strdup("READ_SMS"), strdup("RECEIVE_SMS") }, 2);
 }
+void processIncomingSMS(jstring body, jstring address, long timestamp, int state) {
+
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_SmsHandlerNative_SmsListener_onReceived(JNIEnv * env, jobject /* this */, jobject intent) {
+	//class
+	jclass intentClass = env->FindClass("android/content/Intent");
+	jclass smsMessageClass = env->FindClass("android/telephony/SmsMessage");
+	//method
+	jmethodID getActionMethod = env->GetMethodID(intentClass, "getAction", "()Ljava/lang/String;");
+	jmethodID getMessageBodyMethod = env->GetMethodID(smsMessageClass, "getMessageBody", "()Ljava/lang/String;");
+	jmethodID getOriginatingAddressMethod = env->GetMethodID(smsMessageClass, "getOriginatingAddress", "()Ljava/lang/String;");
+
+	//obj
+	jstring action = (jstring)env->CallObjectMethod(intent, getActionMethod);
+	jboolean isCopy;
+	const char* strAction = env->GetStringUTFChars(action, &isCopy);
+	env->DeleteLocalRef(action);
+
+	if (strncmp(strAction, "android.provider.Telephony.SMS_RECEIVED", strlen(strAction)) == 0)
+	{
+		jclass intentsSmsClass = env->FindClass("android/provider/Telephony$Sms$Intents");
+		jmethodID getMessagesFromIntentMethod = env->GetStaticMethodID(intentsSmsClass, "getMessagesFromIntent", "(Landroid/content/Intent;)[Landroid/telephony/SmsMessage;");
+		jobjectArray smsMessagesObj = (jobjectArray)env->CallStaticObjectMethod(intentsSmsClass, getMessagesFromIntentMethod, intent);
+		env->DeleteLocalRef(intentsSmsClass);
+		jsize size = env->GetArrayLength(smsMessagesObj);
+		for (int i = 0; i < size; ++i) {
+			jobject obj1 = env->GetObjectArrayElement(smsMessagesObj, i);
+			jstring body = (jstring)env->CallObjectMethod(obj1, getMessageBodyMethod);
+			jstring address = (jstring)env->CallObjectMethod(obj1, getOriginatingAddressMethod);
+			processIncomingSMS(body, address, 0, 0);
+			env->DeleteLocalRef(obj1);
+		}
+		env->DeleteLocalRef(smsMessageClass);
+		env->DeleteLocalRef(smsMessagesObj);
+	}
+}
+
+jint JNI_OnLoad(JavaVM* vm, void* reserved) {
+	JNIEnv* env = nullptr;
+	vm->GetEnv((void**) &env, JNI_VERSION_1_6);
+	jclass smsListenerClass = env->FindClass("com/Android3/SmsListener");
+	env->DeleteLocalRef(smsListenerClass);
+	return JNI_VERSION_1_6;
+}
